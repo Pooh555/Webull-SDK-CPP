@@ -1,5 +1,6 @@
 #pragma once
 
+#include <curl/curl.h>
 #include <nlohmann/json.hpp>
 
 #include <filesystem>
@@ -15,4 +16,14 @@ void write_json(const nlohmann::json& json, const std::filesystem::path& output_
 [[nodiscard]] std::string compute_hmac_sha1(const std::string& key, const std::string& message);
 [[nodiscard]] std::string compute_hmac_sha256(const std::string& key, const std::string& message);
 [[nodiscard]] std::string compute_md5(const std::string& data);
+[[nodiscard]] std::string generate_openapi_signature(
+          CURL*                                             curl,
+    const std::string&                                      app_key,
+    const std::string&                                      app_secret,
+    const std::string&                                      nonce,
+    const std::string&                                      timestamp,
+          std::string_view                                  request_path,
+    const std::vector<std::pair<std::string, std::string>>& query_params,
+    const std::string&                                      request_body);
+
 }

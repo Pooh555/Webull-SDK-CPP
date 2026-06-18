@@ -169,4 +169,55 @@ std::string compute_md5(const std::string& data) {
     return md5_str;
 }
 
+std::string generate_openapi_signature(
+          CURL*                                             curl,
+    const std::string&                                      app_key,
+    const std::string&                                      app_secret,
+    const std::string&                                      nonce,
+    const std::string&                                      timestamp,
+          std::string_view                                  request_path,
+    const std::vector<std::pair<std::string, std::string>>& query_params,
+    const std::string&                                      request_body) {
+    std::vector<std::pair<std::string, std::string>> parameters {
+        {"host", "th-api.uat.webullbroker.com"},
+        {"x-app-key", app_key},
+        {"x-signature-algorithm", "HMAC-SHA1"},
+        {"x-signature-nonce", nonce},
+        {"x-signature-version", "1.0"},
+        {"x-timestamp", timestamp}
+    };
+
+    parameters.insert(parameters.end(), query_params.begin(), query_params.end());
+
+    std::sort(parameters.begin(), parameters.end(), [](const auto& lhs, const auto& rhs) {
+        return lhs.first < rhs.first;
+    });
+
+    std::string canonical       = "";
+    size_t      parameters_size = parameters.size();
+
+    for (size_t i { 0 }; i < parameters_size; ++i) {
+        if (i > 0) {
+            canonical += "&";
+        }
+
+        canonical += parameters[i].first + "=" + parameters[i].second;
+    }
+
+    std::string sign_string = std::string(request_path) + "&" + canonical;
+    
+    if (!request_body.empty()) {
+        sign_string += "&" + utilities::compute_md5(request_body);
+    }
+
+    char*       escaped = curl_easy_escape(curl, sign_string.c_str(), static_cast<int>(sign_string.size()));
+    std::string encoded_sign_string = escaped ? escaped : "";
+    
+    curl_free(escaped);
+
+    std::string signing_key = app_secret + "&";
+   
+    return compute_hmac_sha1(signing_key, encoded_sign_string);
+}
+
 }
