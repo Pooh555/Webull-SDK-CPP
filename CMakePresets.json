@@ -1,0 +1,47 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER":             "gcc",
+                "CMAKE_CXX_COMPILER":           "g++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name":        "debug",
+            "displayName": "GCC Debug (Make)",
+            "inherits":    "base",
+            "binaryDir":   "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_BUILD_TYPE":     "Debug"
+            }
+        },
+        {
+            "name":        "debug-ninja",
+            "displayName": "GCC Debug (Ninja)",
+            "description": "Recommended: faster incremental builds",
+            "inherits":    "base",
+            "generator":   "Ninja",
+            "binaryDir":   "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_BUILD_TYPE":     "Debug"
+            }
+        },
+        {
+            "name":        "release",
+            "displayName": "GCC Release (Ninja)",
+            "inherits":    "base",
+            "generator":   "Ninja",
+            "binaryDir":   "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_BUILD_TYPE":     "Release"
+            }
+        }
+    ]
+}
