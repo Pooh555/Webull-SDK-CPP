@@ -1,5 +1,7 @@
 #include "token.hpp"
-#include "utilities/utilities.hpp"
+
+#include "utilities/http.hpp"
+#include "utilities/json.hpp"
 
 #include <spdlog/spdlog.h>
 
@@ -9,7 +11,7 @@ Token::Token(
     const Secret&                secret,
     const std::string_view&      host) {
     nlohmann::json json_data;
-    utilities::read_json(&json_data, token_path);
+    utilities::json::read(&json_data, token_path);
 
     try {
         token = json_data.value("token", "");
@@ -41,13 +43,13 @@ Token::Token(
     spdlog::info("[Token] Saving newly activated token to disk...");
     
     json_data["token"] = this->token; 
-    utilities::write_json(json_data, token_path);
+    utilities::json::write(json_data, token_path);
 
     spdlog::info("[Token] Successfully activated token");
 }
 
 void Token::generate(CURL* curl, const Secret& secret, const std::string_view& host) {
-    std::string response_message = utilities::execute_request(curl, secret, host, CREATE_PATH, true);
+    std::string response_message = utilities::http::execute_request(curl, secret, host, CREATE_PATH, true);
 
     if (!response_message.empty()) {
         try {
@@ -78,7 +80,7 @@ void Token::verify(CURL* curl, const Secret& secret, const std::string_view& hos
     json_payload["token"] = this->token; 
     std::string request_body = json_payload.dump(); 
 
-    std::string response_message = utilities::execute_request(curl, secret, host, VERIFY_PATH, true, request_body);
+    std::string response_message = utilities::http::execute_request(curl, secret, host, VERIFY_PATH, true, request_body);
 
     if (!response_message.empty()) {
         try {

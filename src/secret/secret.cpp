@@ -1,13 +1,13 @@
 #include "secret.hpp"
 
-#include "utilities/utilities.hpp"
+#include "utilities/json.hpp"
 
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
 Secret::Secret(const std::filesystem::path& secret_path) {
     nlohmann::json json_data;
-    utilities::read_json(&json_data, secret_path);
+    utilities::json::read(&json_data, secret_path);
 
     try {
         id     = json_data.value("id", "");

@@ -1,12 +1,14 @@
 #include "application.hpp"
 
 #include "trading.hpp"
-#include "utilities/utilities.hpp"
+#include "utilities/cryptography.hpp"
 
 #include <spdlog/spdlog.h>
 #include <nlohmann/json.hpp>
 
 Application::Application() {
+    spdlog::set_level(spdlog::level::debug);
+
     curl   = std::make_unique<Curl>();
     secret = std::make_unique<Secret>(SECRET_PATH);
     token  = std::make_unique<Token>(TOKEN_PATH, curl->get_handle(), *secret.get(), HOST);
@@ -48,7 +50,7 @@ void Application::run() {
     }
 
     spdlog::info("[Application] Target localized: {}. Executing order placement for SSG...", extracted_account_id);
-    std::string client_order_id = utilities::generate_nonce(26uz);
+    std::string client_order_id = utilities::cryptography::generate_nonce(26uz);
 
     std::string place_json = client.place_order({
         .account_id              = extracted_account_id,          

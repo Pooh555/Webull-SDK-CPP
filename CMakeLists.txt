@@ -26,7 +26,11 @@ add_executable(Webull-Trading-Bot
 
     src/secret/secret.cpp
     
-    src/utilities/utilities.cpp
+    src/utilities/cryptography.cpp
+    src/utilities/http.cpp
+    src/utilities/json.cpp
+    src/utilities/openapi.cpp
+    src/utilities/time.cpp
 )
 
 target_include_directories(Webull-Trading-Bot
