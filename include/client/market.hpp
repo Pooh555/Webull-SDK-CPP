@@ -16,7 +16,7 @@ namespace wdk::client {
 struct MarketRequest {
     std::string           symbol          { "" };
     std::string           category        { "" };
-    std::optional<size_t> count           { 0uz };
+    std::optional<size_t> count;
     std::string           trading_session { "" };
 };
 
@@ -58,8 +58,8 @@ private:
           wdk::core::CurlPool&    pool_;  
           wdk::core::ThreadPool&  thread_pool_;
     const wdk::core::Credentials& credentials_;
-          std::string host_       { "" };
-          std::string token_      { "" };
+          std::string             host_         { "" };
+          std::string             token_        { "" };
 
     [[nodiscard]] std::future<wdk::utilities::Response> execute_request_async(
         std::string                path,

@@ -29,7 +29,7 @@ wdk::utilities::Response TradingClient::fetch_account_list() {
 }
 
 std::string TradingClient::get_account_id() {
-    if (!account_id.empty()) return account_id;
+    if (!account_id_.empty()) return account_id_;
 
     std::string account_list_json = fetch_account_list_async().get().message;
     std::string extracted_account_id = "";
@@ -53,9 +53,9 @@ std::string TradingClient::get_account_id() {
 
     spdlog::info("[TradingClient] Successfully retrieved account ID");
 
-    account_id = extracted_account_id;
+    account_id_ = extracted_account_id;
 
-    return account_id;
+    return account_id_;
 }
 
 wdk::utilities::Response TradingClient::fetch_account_balance(const std::string& account_id) {
@@ -113,7 +113,7 @@ wdk::utilities::Response TradingClient::preview_order(const OrderRequest& reques
         {"symbol",                  request.symbol},
         {"order_type",              request.order_type},
         {"entrust_type",            request.entrust_type},
-        {"support_trading_session", request.support_trading_session},
+        {"support_trading_session", request.trading_session},
         {"time_in_force",           request.time_in_force},
         {"side",                    request.side}
     };
@@ -146,7 +146,7 @@ wdk::utilities::Response TradingClient::place_order(const OrderRequest& request)
         {"symbol",                  request.symbol},
         {"order_type",              request.order_type},
         {"entrust_type",            request.entrust_type},
-        {"support_trading_session", request.support_trading_session},
+        {"support_trading_session", request.trading_session},
         {"time_in_force",           request.time_in_force},
         {"side",                    request.side}
     };
@@ -257,7 +257,7 @@ std::future<wdk::utilities::Response> TradingClient::preview_order_async(const O
         {"symbol",                  request.symbol},
         {"order_type",              request.order_type},
         {"entrust_type",            request.entrust_type},
-        {"support_trading_session", request.support_trading_session},
+        {"support_trading_session", request.trading_session},
         {"time_in_force",           request.time_in_force},
         {"side",                    request.side}
     };
@@ -283,7 +283,7 @@ std::future<wdk::utilities::Response> TradingClient::place_order_async(const Ord
         {"symbol",                  request.symbol},
         {"order_type",              request.order_type},
         {"entrust_type",            request.entrust_type},
-        {"support_trading_session", request.support_trading_session},
+        {"support_trading_session", request.trading_session},
         {"time_in_force",           request.time_in_force},
         {"side",                    request.side}
     };

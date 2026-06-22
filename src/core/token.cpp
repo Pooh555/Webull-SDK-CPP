@@ -20,8 +20,8 @@ Token::Token(
 
     try {
         token_ = json_data.value("token", "");
-    } catch (const std::exception& e) {
-        spdlog::critical("[Token] Failed map JSON fields to internal registry: {}", e.what());
+    } catch (const nlohmann::json::exception& e) {
+        spdlog::critical("[Token] Failed to map JSON fields to internal registry: {}", e.what());
     }
 
     verify(pool, credentials, host);
@@ -76,8 +76,8 @@ void Token::generate(CurlPool& pool, const Credentials& credentials, const std::
             } else {
                 spdlog::warn("[Token] JSON payload was successful but missing 'token' key.");
             }
-        } catch (const nlohmann::json::parse_error& e) {
-            spdlog::error("[Token] Failed to parse JSON response: {}", e.what());
+        } catch (const nlohmann::json::exception& e) {
+            spdlog::error("[Token] Failed to process JSON response: {}", e.what());
         }
     }
 }
@@ -107,8 +107,8 @@ void Token::verify(CurlPool& pool, const Credentials& credentials, const std::st
             this->status_ = json_response.value("status", this->status_);
             
             spdlog::info("[Token] Verification Response:\n{}", json_response.dump(4));
-        } catch (const nlohmann::json::parse_error& e) {
-            spdlog::warn("[Token] Failed to parse JSON verification response: {}", e.what());
+        } catch (const nlohmann::json::exception& e) {
+            spdlog::warn("[Token] Failed to process JSON verification response: {}", e.what());
         }
     }
 }

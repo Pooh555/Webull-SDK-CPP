@@ -40,7 +40,7 @@ Response execute_request(
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, nullptr);
 
         const std::string timestamp = get_utc_timestamp();
-        const std::string nonce     = generate_nonce(26uz);
+        const std::string nonce     = generate_nonce();
 
         std::string                                      request_path { path };
         std::vector<std::pair<std::string, std::string>> query_parameters {};

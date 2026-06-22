@@ -59,7 +59,7 @@ void Application::demo() {
         spdlog::error("[Application] Failed to fetch account positions:\n {}", nlohmann::json::parse(account_position.message).dump(4));
     }
 
-    std::string client_order_id = wdk::utilities::generate_nonce(26uz);
+    std::string client_order_id = wdk::utilities::generate_nonce();
 
     spdlog::info("[Application] Dispatching order placement...");
 
@@ -72,7 +72,7 @@ void Application::demo() {
         .symbol                  { "SSG" },
         .order_type              { "LIMIT" },
         .entrust_type            { "QTY" },
-        .support_trading_session { "CORE" },                        
+        .trading_session         { "CORE" },                        
         .time_in_force           { "DAY" },
         .side                    { "BUY" },
         .quantity                { 1.0 },
@@ -95,7 +95,7 @@ void Application::demo() {
         .client_order_id { client_order_id },
         .time_in_force   { "DAY" }, 
         .quantity        { 1.0 },
-        .limit_price     { 11.30 },
+        .limit_price     { 11.25 },
         .stop_price      { std::nullopt }
     });
 
