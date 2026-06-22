@@ -1,14 +1,130 @@
 # WDK: A Webull Software Development Kit for C++
 
 <p align="center">
-  <img src="https://github.com/Pooh555/Webull-SDK/edit/main/assets/placeholder" style=width: 100%;/>
+  <img src="https://github.com/Pooh555/Webull-SDK/blob/main/assets/placeholder.png" style=width: 100%;/>
+</p>
+<p align="center">
+  <i>Left: source code, Right: output</i>
 </p>
 
 ## Overview
-
-
 I detest Python, and, coincidentally, the official Java SDK is unreliably updated, thus let's go with C++. :P
 
-**[Visit the C++ Webull SDK Documentation](docs/documentation.md)**
+## Documentation
+This documentation is AI-generated, and may not be up-to-date cuz I'm too lazy to write. :3
 
-This documentation is AI-generated cuz I'm too lazy to write. :3
+**Visit the documentation here: [documenetation](docs/documentation.md)**
+
+## Installation
+### Development
+Cloning the main repository.
+```
+git clone https://github.com/Pooh555/Webull-SDK/
+```
+Compiling the library.
+```
+cd Webull-SDK
+./build.sh
+```
+Executing the example.
+```
+./run.sh
+```
+### Integrating as a thrid-party library
+Add submodule.
+```
+git submodule add https://github.com/Pooh555/Webull-SDK.git thrid-party/Webull-SDK
+git submodule update --init --recursive
+```
+Modify CMakeLists.txt.
+```cmake
+add_subdirectory(external/Webull-SDK)
+
+add_executable(MyApplication
+    src/main.cpp
+)
+
+target_link_libraries(MyApplication
+    PRIVATE
+        Webull::SDK
+)
+```
+## Usage
+### Market API
+Fetch market data. 
+Example: Fetching tick data.
+```cpp
+// Initialize a market client for fetching market data
+wdk::client::MarketClient market_client(
+    *curl_pool,
+    *thread_pool,
+    *credentials,
+    HOST,
+    token->get_handle()
+);
+
+// Fetch tick data
+spdlog::info("[Application] Fetching tick data ...");
+
+std::future<wdk::utilities::Response> tick_future = market_client.fetch_tick_data_async({ 
+    .symbol           { "AAPL" },
+    .category         { "US_STOCK" },
+    .count            { 2uz  },
+    .trading_sessions { "PRE" }
+});
+wdk::utilities::Response tick_data = tick_future.get();
+
+if (tick_data.http_code == 200L) {
+    spdlog::info("[Application] Successfully fetched tick data:\n{}", nlohmann::json::parse(tick_data.message).dump(4));
+} else {
+    spdlog::error("[Application] Failed to fetch tick data:\n{}", nlohmann::json::parse(tick_data.message).dump(4));
+}
+```
+### Trading API
+Place, modify, and cancel orders.
+Example: Placing an order.
+```cpp
+// Initialize a trading client for handling order operations
+wdk::client::TradingClient client(
+    *curl_pool, 
+    *thread_pool,
+    *credentials.get(), 
+    HOST, 
+    token->get_handle()
+);
+
+// Extract account id
+const std::string extracted_account_id = client.get_account_id();
+
+// Retrive order id (nonce)
+std::string client_order_id = wdk::utilities::generate_nonce();
+
+// Place an order
+spdlog::info("[Application] Dispatching order placement...");
+
+std::future<wdk::utilities::Response> place_order_future = client.place_order_async({
+    .account_id              { extracted_account_id },          
+    .combo_type              { "NORMAL" },                      
+    .client_order_id         { client_order_id },               
+    .instrument_type         { "EQUITY" },                      
+    .market                  { "US" },
+    .symbol                  { "NVDA" },
+    .order_type              { "LIMIT" },
+    .entrust_type            { "QTY" },
+    .trading_session         { "ALL_DAY" },                        
+    .time_in_force           { "DAY" },
+    .side                    { "BUY" },
+    .quantity                { 1.0 },
+    .limit_price             { 200.05 },
+    .stop_price              { std::nullopt }
+});
+wdk::utilities::Response place_order = place_order_future.get();
+
+if (place_order.http_code == 200L) {
+    spdlog::info("[Application] Successfully placed order:\n {}", nlohmann::json::parse(place_order.message).dump(4));
+} else {
+    spdlog::error("[Application] Failed to place order:\n {}", nlohmann::json::parse(place_order.message).dump(4));
+}
+```
+### License
+**Visit the license here: [documenetation](https://github.com/Pooh555/Webull-SDK/blob/main/LICENSE)**
