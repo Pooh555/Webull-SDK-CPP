@@ -1,5 +1,6 @@
-# Secrets
-examples/res
+# Credentials
+examples/res/*
+!examples/res/dummy.json
 
 # Build files
-/out
+/out/*

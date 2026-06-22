@@ -7,13 +7,15 @@ namespace wdk::core {
 CurlPool::CurlPool(size_t pool_size) {
     for (size_t i { 0uz }; i < pool_size; ++i) {
         CURL* handle = curl_easy_init();
+
         if (handle) {
             handles_.push(handle);
         } else {
             spdlog::critical("[CurlPool] Failed to initialize a CURL handle");
         }
     }
-    spdlog::info("[CurlPool] Initialized connection pool with {} handles", handles_.size());
+    
+    spdlog::info("[CurlPool] Successfully initialized connection pool with {} handles", handles_.size());
 }
 
 CurlPool::~CurlPool() {

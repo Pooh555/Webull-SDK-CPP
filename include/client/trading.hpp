@@ -46,12 +46,11 @@ public:
     std::future<wdk::utilities::Response> modify_order_async(const OrderRequest& request);
     std::future<wdk::utilities::Response> cancel_order_async(const OrderRequest& request);
 
-    [[nodiscard]] std::string               get_account_id();
+    [[nodiscard]] std::string              get_account_id();
     [[nodiscard]] wdk::utilities::Response fetch_account_list();
     [[nodiscard]] wdk::utilities::Response fetch_account_balance(const std::string& account_id);
     [[nodiscard]] wdk::utilities::Response fetch_account_position(const std::string& account_id);
 
-    [[nodiscard]] std::string                            get_account_id_async();
     [[nodiscard]] std::future<wdk::utilities::Response> fetch_account_list_async();
     [[nodiscard]] std::future<wdk::utilities::Response> fetch_account_balance_async(const std::string& account_id);
     [[nodiscard]] std::future<wdk::utilities::Response> fetch_account_position_async(const std::string& account_id);

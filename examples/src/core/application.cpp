@@ -33,7 +33,7 @@ void Application::demo() {
 
     const std::string extracted_account_id = client.get_account_id();
 
-    spdlog::info("[Application] Dispatching balance and position requests concurrently...");
+    spdlog::info("[Application] Dispatching balance request concurrently...");
 
     std::future<wdk::utilities::Response> balance_future  = client.fetch_account_balance_async(extracted_account_id);
     
@@ -45,6 +45,8 @@ void Application::demo() {
         spdlog::error("[Application] Failed to fetch account balance:\n {}", nlohmann::json::parse(account_balance.message).dump(4));
     }
     
+    spdlog::info("[Application] Dispatching position request concurrently...");
+
     std::future<wdk::utilities::Response> position_future = client.fetch_account_position_async(extracted_account_id);
     
     wdk::utilities::Response account_position = position_future.get();

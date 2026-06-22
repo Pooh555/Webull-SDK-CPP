@@ -20,6 +20,8 @@ Credentials::Credentials(const std::filesystem::path& credentials_path) {
         spdlog::critical("[Credentials] Failed map JSON fields to internal registry: {}", e.what());
         throw std::runtime_error("[Credentials] Failed to initialize credentials");
     }
+    
+    spdlog::info("[Credentials] Successfully initialized app credentials");
 }
 
 }

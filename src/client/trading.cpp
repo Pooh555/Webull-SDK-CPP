@@ -27,10 +27,46 @@ wdk::utilities::Response TradingClient::fetch_account_list() {
     );
 }
 
+/*
+ * Deprecated function before implementing concurrecy
+ * 
+ * std::string TradingClient::get_account_id() {
+ *     if (!account_id.empty()) return account_id;
+ * 
+ *     std::string account_list_json    = fetch_account_list().message;
+ *     std::string extracted_account_id = "";
+ * 
+ *     try {
+ *         if (!account_list_json.empty()) {
+ *             auto parsed_response = nlohmann::json::parse(account_list_json);
+ *             
+ *             if (parsed_response.is_array() && !parsed_response.empty()) {
+ *                 extracted_account_id = parsed_response[0].value("account_id", "");
+ *             } else if (parsed_response.contains("data") && parsed_response["data"].is_array() && !parsed_response["data"].empty()) {
+ *                 extracted_account_id = parsed_response["data"][0].value("account_id", "");
+ *             }
+ *         }
+ *     } catch (const nlohmann::json::parse_error& e) {
+ *         spdlog::error("[TradingClient] Failed to parse account listing JSON metrics: {}", e.what());
+ *         return "";
+ *     }
+ * 
+ *     if (extracted_account_id.empty()) {
+ *         spdlog::error("[TradingClient] Could not determine a valid account ID target mapping");
+ *     }
+ * 
+ *     spdlog::info("[TradingClient] Successfully retrieved account ID");
+ * 
+ *     account_id = extracted_account_id;
+ * 
+ *     return account_id;
+ * }
+ */
+
 std::string TradingClient::get_account_id() {
     if (!account_id.empty()) return account_id;
 
-    std::string account_list_json    = fetch_account_list().message;
+    std::string account_list_json = fetch_account_list_async().get().message;
     std::string extracted_account_id = "";
 
     try {
@@ -222,38 +258,6 @@ std::future<wdk::utilities::Response> TradingClient::fetch_account_list_async() 
         "", 
         token_
     );
-}
-
-std::string TradingClient::get_account_id_async() {
-    if (!account_id.empty()) return account_id;
-
-    std::string account_list_json = fetch_account_list_async().get().message;
-    std::string extracted_account_id = "";
-
-    try {
-        if (!account_list_json.empty()) {
-            auto parsed_response = nlohmann::json::parse(account_list_json);
-            
-            if (parsed_response.is_array() && !parsed_response.empty()) {
-                extracted_account_id = parsed_response[0].value("account_id", "");
-            } else if (parsed_response.contains("data") && parsed_response["data"].is_array() && !parsed_response["data"].empty()) {
-                extracted_account_id = parsed_response["data"][0].value("account_id", "");
-            }
-        }
-    } catch (const nlohmann::json::parse_error& e) {
-        spdlog::error("[TradingClient] Failed to parse account listing JSON metrics: {}", e.what());
-        return "";
-    }
-
-    if (extracted_account_id.empty()) {
-        spdlog::error("[TradingClient] Could not determine a valid account ID target mapping");
-    }
-
-    spdlog::info("[TradingClient] Successfully retrieved account ID");
-
-    account_id = extracted_account_id;
-
-    return account_id;
 }
 
 std::future<wdk::utilities::Response> TradingClient::fetch_account_balance_async(const std::string& account_id) {
