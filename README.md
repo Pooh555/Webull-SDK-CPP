@@ -160,6 +160,7 @@ The codebase is split into three layers, each with a single responsibility:
 └───────────────────────────────────────────────────────────────┘
 ```
 ### Project Structure
+This project is build based on CMake build system.
 ```
 .
 ├── assets
@@ -208,8 +209,6 @@ The codebase is split into three layers, each with a single responsibility:
     ├── client
     ├── core
     └── utilities
-
-47 directories
 ```
 ### License
 **Visit the license here: [documenetation](https://github.com/Pooh555/Webull-SDK/blob/main/LICENSE)**
