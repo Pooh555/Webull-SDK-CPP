@@ -854,10 +854,10 @@ All fields default to empty or `std::nullopt`. Only the fields relevant to a spe
 | `symbol` | `string` | Ticker symbol for single-symbol endpoints, e.g., `"AAPL"`. Used by `fetch_tick_data`, `fetch_quotes_data`, `fetch_historical_bars_data`, and `fetch_footprint_data` |
 | `symbols` | `string` | Comma-separated list of ticker symbols for multi-symbol endpoints, e.g., `"AAPL,NVDA,MSFT"`. Used by `fetch_snapshot_data` and `fetch_historical_batch_bars_data` |
 | `category` | `string` | Instrument category. Use `"US_STOCK"` for US equities |
-| `timespan` | `string` | Bar interval for bar and footprint endpoints. Valid values: `"M1"`, `"M5"`, `"M15"`, `"M30"`, `"H1"`, `"D1"` |
+| `timespan` | `string` | Bar interval for bar and footprint endpoints. Valid values: `"M1"`, `"M5"`, `"M15"`, `"M30"`, `"H"`, `"D"` |
 | `count` | `optional<size_t>` | Maximum number of records to return. Omitted from the request if not set |
 | `real_time_required` | `optional<bool>` | When `true`, the response includes the latest incomplete (real-time) bar in addition to closed bars. Applies to bar and footprint endpoints |
-| `trading_sessions` | `string` | Session filter. Valid values: `"PRE"`, `"CORE"`, `"POST"`, `"ALL_DAY"` |
+| `trading_sessions` | `string` | Session filter. Valid values: `"PRE"`, `"RTH"`, `"ATH"`, `"OVN"` |
 | `depth` | `optional<uint8_t>` | Number of order book levels to return. Applies exclusively to `fetch_quotes_data` |
 | `extended_hour_required` | `optional<bool>` | When `true`, the snapshot response includes extended-hours price and volume fields. Applies to `fetch_snapshot_data` |
 | `overnight_required` | `optional<bool>` | When `true`, the response includes overnight session (`ovn_*`) fields. Applies to `fetch_snapshot_data` and `fetch_quotes_data` |
@@ -956,7 +956,7 @@ struct OrderRequest {
 | `symbol` | `string` | Ticker symbol, e.g., `"AAPL"`, `"NVDA"` |
 | `order_type` | `string` | `"LIMIT"`, `"MARKET"`, `"STOP"`, `"STOP_LIMIT"` |
 | `entrust_type` | `string` | Entrustment type. Use `"QTY"` for quantity-based orders |
-| `trading_session` | `string` | `"CORE"`, `"PRE"`, `"POST"`, `"ALL_DAY"` |
+| `trading_session` | `string` | `"PRE"`, `"RTH"`, `"ATH"`, `"OVN"` |
 | `time_in_force` | `string` | `"DAY"`, `"GTC"`, `"IOC"`, `"FOK"` |
 | `side` | `string` | `"BUY"` or `"SELL"` |
 | `quantity` | `optional<double>` | Number of shares |
