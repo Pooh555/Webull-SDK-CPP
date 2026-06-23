@@ -22,9 +22,9 @@ I detest Python, and, coincidentally, the official Java SDK is unreliably mainta
 ## Documentation
 This documentation is AI-generated, and may not be up-to-date cuz I'm too lazy to write. :3
 
-**Visit the full documentation here: [Full Documenetation](docs/documentation.md)**
+**Visit the full documentation here: [Full Documentation](docs/documentation.md)**
 
-**Visit the documentation for LLMs here: [Documenetation for AI Agents](docs/llms.txt)**
+**Visit the documentation for LLMs here: [Documentation for AI Agents](docs/llms.txt)**
 
 ## Installation
 ### Quick Start
@@ -239,4 +239,4 @@ This project is build based on CMake build system.
     └── utilities
 ```
 ### License
-**Visit the license here: [documenetation](https://github.com/Pooh555/Webull-SDK/blob/main/LICENSE)**
+**Visit the license here: [MIT License](https://github.com/Pooh555/Webull-SDK/blob/main/LICENSE)**
